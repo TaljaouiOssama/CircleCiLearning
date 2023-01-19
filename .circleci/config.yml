@@ -1,27 +1,31 @@
 version: 2.1
 jobs:
-  say-hello:
+  persist_to_workspace:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: "Say hello"
-          command: echo Hello
-  say-world:
-    environment:
-      me: "ossama"
+          command: echo Hello > output.txt
+      - persist_to_workspace:
+        root: /tmp/workspace
+        paths:
+          - output.txt
+  get_from_workspace:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
-          name: "Say world"
-          command: echo $me 
+          name: "hear hello"
+          command: cat output.txt
 workflows:
   default:
     jobs:
-      - say-hello
-      - say-world:
+      - persist_to_workspace
+      - get_from_workspace:
           requires: 
-            - say-hello
+            - persist_to_workspace
