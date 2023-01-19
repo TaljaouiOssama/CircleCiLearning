@@ -1,8 +1,24 @@
 version: 2.1
-jobs:
-  persist_to_workspace:
-    docker:
+default_image: $default_image
+  docker:
       - image: circleci/node:13.8.0
+commands:
+  print_pipeline_id:
+    description: ""
+    parameters:
+      param: 
+        type: string
+        default: $CIRCLE_WORKFLOW_ID
+    steps:
+      - run: echo <<parameters.param>>
+
+      
+jobs:
+  print_pipeline_id:
+    <<: *default_image
+    -print_pipeline_id
+  persist_to_workspace:
+    <<: *default_image
     steps:
       - checkout
       - run:
@@ -13,8 +29,7 @@ jobs:
           paths:
             - output.txt
   get_from_workspace:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *default_image
     steps:
       - checkout
       - attach_workspace:
@@ -25,6 +40,7 @@ jobs:
 workflows:
   default:
     jobs:
+      - print_pipeline_id
       - persist_to_workspace
       - get_from_workspace:
           requires: 
