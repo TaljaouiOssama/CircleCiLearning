@@ -1,7 +1,4 @@
 version: 2.1
-default_image: $default_image
-  docker:
-    - image: circleci/node:13.8.0
 commands:
   print_pipeline_id:
     description: ""
@@ -15,10 +12,13 @@ commands:
       
 jobs:
   print_pipeline_id:
-    <<: *default_image
-    -print_pipeline_id
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      -print_pipeline_id
   persist_to_workspace:
-    <<: *default_image
+    docker:
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
@@ -29,7 +29,8 @@ jobs:
           paths:
             - output.txt
   get_from_workspace:
-    <<: *default_image
+    docker:
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - attach_workspace:
