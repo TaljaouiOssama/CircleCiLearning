@@ -1,7 +1,7 @@
 version: 2.1
 default_image: $default_image
   docker:
-      - image: circleci/node:13.8.0
+    - image: circleci/node:13.8.0
 commands:
   print_pipeline_id:
     description: ""
