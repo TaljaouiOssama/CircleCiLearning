@@ -21,5 +21,5 @@ workflows:
     jobs:
       - say-hello
       - say-world:
-          requiers: 
+          requires: 
             - say-hello
