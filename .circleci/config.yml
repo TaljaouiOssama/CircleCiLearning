@@ -21,4 +21,4 @@ workflows:
     jobs:
       - say-hello
       - say-world:
-        requiers: ["say-hello"]
+        requiers: say-hello
