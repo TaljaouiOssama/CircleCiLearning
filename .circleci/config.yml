@@ -9,9 +9,9 @@ jobs:
           name: "Say hello"
           command: echo Hello > output.txt
       - persist_to_workspace:
-        root: /tmp/workspace
-        paths:
-          - output.txt
+          root: /tmp/workspace
+          paths:
+            - output.txt
   get_from_workspace:
     docker:
       - image: circleci/node:13.8.0
