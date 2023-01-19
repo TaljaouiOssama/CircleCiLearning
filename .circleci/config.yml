@@ -15,7 +15,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      -print_pipeline_id
+      - print_pipeline_id
   persist_to_workspace:
     docker:
       - image: circleci/node:13.8.0
