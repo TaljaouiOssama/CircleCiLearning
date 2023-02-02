@@ -1,48 +1,69 @@
 version: 2.1
-commands:
-  print_pipeline_id:
-    description: ""
-    parameters:
-      param: 
-        type: string
-        default: $CIRCLE_WORKFLOW_ID
-    steps:
-      - run: echo <<parameters.param>>
+# commands:
+#   print_pipeline_id:
+#     description: ""
+#     parameters:
+#       param: 
+#         type: string
+#         default: $CIRCLE_WORKFLOW_ID
+#     steps:
+#       - run: echo <<parameters.param>>
 
       
+# jobs:
+#   print_pipeline_id:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - print_pipeline_id
+#   persist_to_workspace:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Say hello"
+#           command: echo Hello > ~/output.txt
+#       - persist_to_workspace:
+#           root: ~/
+#           paths:
+#             - output.txt
+#   get_from_workspace:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - checkout
+#       - attach_workspace:
+#           at: ~/
+#       - run:
+#           name: "hear hello"
+#           command: cat ~/output.txt
 jobs:
-  print_pipeline_id:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - print_pipeline_id
-  persist_to_workspace:
+  build:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: echo Hello > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt
-  get_from_workspace:
+      - run: npm run build
+  test:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: "hear hello"
-          command: cat ~/output.txt
+      - run: npm run test
+  audit:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm audit
 workflows:
   default:
     jobs:
-      - print_pipeline_id
-      - persist_to_workspace
-      - get_from_workspace:
+      - build
+      - test:
           requires: 
-            - persist_to_workspace
+            - build
+      - audit:
+          requires: 
+            - test
